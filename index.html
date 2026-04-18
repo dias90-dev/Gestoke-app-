@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="pt-AO">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestão Simples - Pequenos Negócios</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#165DFF',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50 font-sans">
+
+    <div class="min-h-screen flex flex-col">
+        <!-- Cabeçalho -->
+        <header class="bg-primary text-white py-4 px-6 shadow-md">
+            <h1 class="text-xl font-bold text-center">Gestão Simples</h1>
+            <p class="text-sm text-center opacity-90">Controle o seu negócio facilmente</p>
+        </header>
+
+        <!-- Conteúdo Principal -->
+        <main class="flex-grow p-4 md:p-6 max-w-7xl mx-auto w-full">
+            
+            <!-- Menu de Funcionalidades -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                <button onclick="mostrarSecao('vendas')" class="bg-white p-4 rounded-xl shadow hover:shadow-lg transition-all text-center">
+                    <div class="text-primary text-2xl mb-2">🧾</div>
+                    <h3 class="font-semibold">Registar Venda</h3>
+                </button>
+
+                <button onclick="mostrarSecao('estoque')" class="bg-white p-4 rounded-xl shadow hover:shadow-lg transition-all text-center">
+                    <div class="text-primary text-2xl mb-2">📦</div>
+                    <h3 class="font-semibold">Controle de Estoque</h3>
+                </button>
+
+                <button onclick="mostrarSecao('faturas')" class="bg-white p-4 rounded-xl shadow hover:shadow-lg transition-all text-center">
+                    <div class="text-primary text-2xl mb-2">📄</div>
+                    <h3 class="font-semibold">Emitir Fatura</h3>
+                </button>
+
+                <button onclick="mostrarSecao('relatorios')" class="bg-white p-4 rounded-xl shadow hover:shadow-lg transition-all text-center">
+                    <div class="text-primary text-2xl mb-2">📊</div>
+                    <h3 class="font-semibold">Relatórios</h3>
+                </button>
+            </div>
+
+            <!-- Área de Conteúdo Dinâmico -->
+            <div class="bg-white rounded-2xl shadow p-4 md:p-6 min-h-[400px]">
+                
+                <!-- Seção Vendas -->
+                <div id="vendas" class="secao">
+                    <h2 class="text-xl font-bold mb-4 text-gray-800">Registro de Vendas e Despesas</h2>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Descrição</label>
+                            <input type="text" placeholder="Ex: Venda de camisa" class="w-full p-2 border border-gray-300 rounded-lg">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Valor (Kz)</label>
+                            <input type="number" placeholder="0,00" class="w-full p-2 border border-gray-300 rounded-lg">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Tipo</label>
+                            <select class="w-full p-2 border border-gray-300 rounded-lg">
+                                <option>Venda</option>
+                                <option>Despesa</option>
+                            </select>
+                        </div>
+                        <div class="flex items-end">
+                            <button class="w-full bg-primary text-white py-2 rounded-lg font-medium">Registar</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Seção Estoque -->
+                <div id="estoque" class="secao hidden">
+                    <h2 class="text-xl font-bold mb-4 text-gray-800">Controle de Estoque</h2>
+                    <div class="grid md:grid-cols-3 gap-4 mb-4">
+                        <input type="text" placeholder="Nome do produto" class="p-2 border border-gray-300 rounded-lg">
+                        <input type="number" placeholder="Quantidade" class="p-2 border border-gray-300 rounded-lg">
+                        <input type="number" placeholder="Preço (Kz)" class="p-2 border border-gray-300 rounded-lg">
+                    </div>
+                    <button class="bg-primary text-white py-2 px-6 rounded-lg font-medium">Adicionar Produto</button>
+                    
+                    <div class="mt-6">
+                        <h4 class="font-semibold mb-2">Produtos Cadastrados</h4>
+                        <div class="border rounded-lg overflow-hidden">
+                            <table class="w-full text-sm">
+                                <thead class="bg-gray-100">
+                                    <tr>
+                                        <th class="p-2 text-left">Produto</th>
+                                        <th class="p-2 text-left">Qtd</th>
+                                        <th class="p-2 text-left">Preço</th>
+                                        <th class="p-2 text-left">Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="border-t">
+                                        <td class="p-2">Exemplo Produto</td>
+                                        <td class="p-2">50</td>
+                                        <td class="p-2">1.500 Kz</td>
+                                        <td class="p-2 text-primary">Editar / Remover</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Seção Faturas -->
+                <div id="faturas" class="secao hidden">
+                    <h2 class="text-xl font-bold mb-4 text-gray-800">Faturas e Recibos Digitais</h2>
+                    <div class="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center">
+                        <div class="text-6xl mb-4">🧾</div>
+                        <p class="mb-4 text-gray-600">Gere recibos personalizados com os dados do cliente e produtos.</p>
+                        <button class="bg-primary text-white py-2 px-6 rounded-lg font-medium">Criar Nova Fatura</button>
+                    </div>
+                </div>
+
+                <!-- Seção Relatórios -->
+                <div id="relatorios" class="secao hidden">
+                    <h2 class="text-xl font-bold mb-4 text-gray-800">Relatórios Financeiros</h2>
+                    <div class="grid grid-cols-2 gap-4 mb-6">
+                        <div class="bg-green-50 p-4 rounded-xl border border-green-200">
+                            <p class="text-sm text-green-700">Total de Vendas</p>
+                            <p class="text-2xl font-bold text-green-700">0 Kz</p>
+                        </div>
+                        <div class="bg-red-50 p-4 rounded-xl border border-red-200">
+                            <p class="text-sm text-red-700">Total de Despesas</p>
+                            <p class="text-2xl font-bold text-red-700">0 Kz</p>
+                        </div>
+                    </div>
+                    <button class="w-full border border-primary text-primary py-2 rounded-lg font-medium">Exportar Relatório</button>
+                </div>
+
+            </div>
+        </main>
+
+        <!-- Rodapé -->
+        <footer class="bg-gray-900 text-white text-center py-4 mt-8">
+            <p>Desenvolvido por 90 Creations</p>
+        </footer>
+    </div>
+
+    <script>
+        // Função para alternar entre as seções
+        function mostrarSecao(id) {
+            // Esconder todas as seções
+            document.querySelectorAll('.secao').forEach(sec => {
+                sec.classList.add('hidden');
+            });
+            // Mostrar a selecionada
+            document.getElementById(id).classList.remove('hidden');
+        }
+        
+        // Por padrão, mostrar vendas
+        mostrarSecao('vendas');
+    </script>
+
+</body>
+</html>
