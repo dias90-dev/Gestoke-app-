@@ -1,173 +1,1597 @@
 <!DOCTYPE html>
 <html lang="pt-AO">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestão Simples - Pequenos Negócios</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    },
-                    colors: {
-                        primary: '#165DFF',
-                    }
-                }
-            }
-        }
-    </script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GestãoPRO — Pequenos Negócios</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0f1e;
+  --surface: #111827;
+  --surface2: #1a2235;
+  --border: #1e2d45;
+  --accent: #00d4ff;
+  --accent2: #7c3aed;
+  --green: #10b981;
+  --red: #ef4444;
+  --yellow: #f59e0b;
+  --text: #e2e8f0;
+  --muted: #64748b;
+  --card: #141c2e;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  font-size: 14px;
+}
+h1,h2,h3,h4 { font-family: 'Syne', sans-serif; }
+
+/* Layout */
+.app { display: flex; min-height: 100vh; }
+
+/* Sidebar */
+.sidebar {
+  width: 240px;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0; left: 0; bottom: 0;
+  z-index: 100;
+  transition: transform 0.3s;
+}
+.sidebar-logo {
+  padding: 28px 24px 20px;
+  border-bottom: 1px solid var(--border);
+}
+.sidebar-logo h1 {
+  font-size: 20px;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: -0.5px;
+}
+.sidebar-logo p { font-size: 11px; color: var(--muted); margin-top: 2px; }
+.sidebar-nav { flex: 1; padding: 16px 12px; }
+.nav-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--muted); padding: 8px 12px 6px; }
+.nav-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  color: var(--muted);
+  font-weight: 500;
+  transition: all 0.2s;
+  margin-bottom: 2px;
+  font-size: 13.5px;
+}
+.nav-item:hover { background: var(--surface2); color: var(--text); }
+.nav-item.active { background: linear-gradient(135deg, rgba(0,212,255,0.15), rgba(124,58,237,0.15)); color: var(--accent); border: 1px solid rgba(0,212,255,0.2); }
+.nav-item .icon { font-size: 16px; width: 20px; text-align: center; }
+.sidebar-footer { padding: 16px; border-top: 1px solid var(--border); font-size: 11px; color: var(--muted); text-align: center; }
+
+/* Main */
+.main { margin-left: 240px; flex: 1; display: flex; flex-direction: column; }
+.topbar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 16px 32px;
+  display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; z-index: 50;
+}
+.topbar-title { font-size: 18px; font-weight: 700; }
+.topbar-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.topbar-right { display: flex; gap: 10px; align-items: center; }
+.badge {
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: #fff;
+  font-size: 10px;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+.content { padding: 28px 32px; flex: 1; }
+
+/* Sections */
+.section { display: none; animation: fadeIn 0.3s ease; }
+.section.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Cards */
+.stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 28px; }
+.stat-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+}
+.stat-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 3px;
+}
+.stat-card.green::before { background: var(--green); }
+.stat-card.red::before { background: var(--red); }
+.stat-card.blue::before { background: var(--accent); }
+.stat-card.purple::before { background: var(--accent2); }
+.stat-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+.stat-value { font-size: 22px; font-weight: 700; font-family: 'Syne', sans-serif; }
+.stat-value.green { color: var(--green); }
+.stat-value.red { color: var(--red); }
+.stat-value.blue { color: var(--accent); }
+.stat-value.purple { color: var(--accent2); }
+.stat-change { font-size: 11px; color: var(--muted); margin-top: 4px; }
+
+/* Forms */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 20px;
+}
+.card-title { font-size: 15px; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
+.card-title .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
+.form-grid { display: grid; gap: 16px; }
+.form-grid-2 { grid-template-columns: 1fr 1fr; }
+.form-grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+.form-grid-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+.field label { display: block; font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 6px; }
+.field input, .field select, .field textarea {
+  width: 100%;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 14px;
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13.5px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  outline: none;
+}
+.field input:focus, .field select:focus, .field textarea:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(0,212,255,0.1);
+}
+.field select option { background: var(--surface2); }
+
+/* Buttons */
+.btn {
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s;
+  display: inline-flex; align-items: center; gap: 7px;
+}
+.btn-primary {
+  background: linear-gradient(135deg, var(--accent), #0099cc);
+  color: #000;
+  box-shadow: 0 4px 15px rgba(0,212,255,0.3);
+}
+.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(0,212,255,0.4); }
+.btn-purple {
+  background: linear-gradient(135deg, var(--accent2), #5b21b6);
+  color: #fff;
+  box-shadow: 0 4px 15px rgba(124,58,237,0.3);
+}
+.btn-purple:hover { transform: translateY(-1px); }
+.btn-green {
+  background: linear-gradient(135deg, var(--green), #059669);
+  color: #fff;
+  box-shadow: 0 4px 15px rgba(16,185,129,0.3);
+}
+.btn-green:hover { transform: translateY(-1px); }
+.btn-ghost {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+.btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+.btn-danger { background: rgba(239,68,68,0.15); color: var(--red); border: 1px solid rgba(239,68,68,0.3); }
+.btn-danger:hover { background: rgba(239,68,68,0.25); }
+.btn-sm { padding: 6px 12px; font-size: 12px; border-radius: 7px; }
+.btn-full { width: 100%; justify-content: center; }
+
+/* Table */
+.table-wrap { border-radius: 12px; overflow: hidden; border: 1px solid var(--border); }
+table { width: 100%; border-collapse: collapse; }
+thead { background: var(--surface2); }
+thead th { padding: 12px 16px; text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); font-weight: 600; }
+tbody tr { border-top: 1px solid var(--border); transition: background 0.15s; }
+tbody tr:hover { background: var(--surface2); }
+tbody td { padding: 12px 16px; font-size: 13px; }
+
+/* Pills */
+.pill { display: inline-flex; align-items: center; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+.pill-green { background: rgba(16,185,129,0.15); color: var(--green); }
+.pill-red { background: rgba(239,68,68,0.15); color: var(--red); }
+.pill-yellow { background: rgba(245,158,11,0.15); color: var(--yellow); }
+.pill-blue { background: rgba(0,212,255,0.15); color: var(--accent); }
+
+/* Alert / Empty */
+.empty-state { text-align: center; padding: 48px 24px; color: var(--muted); }
+.empty-state .icon { font-size: 40px; margin-bottom: 12px; }
+.empty-state p { font-size: 13px; }
+
+/* Modal */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(4px);
+  z-index: 200;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+.modal-overlay.open { display: flex; }
+.modal {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 32px;
+  width: 100%;
+  max-width: 680px;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: slideUp 0.3s ease;
+}
+@keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+.modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+.modal-title { font-size: 18px; font-weight: 800; }
+.modal-close { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; color: var(--muted); cursor: pointer; font-size: 16px; }
+.modal-close:hover { color: var(--red); border-color: var(--red); }
+
+/* Toast */
+.toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 999; display: flex; flex-direction: column; gap: 10px; }
+.toast {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 18px;
+  display: flex; align-items: center; gap: 10px;
+  font-size: 13px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+  animation: toastIn 0.3s ease;
+  max-width: 320px;
+}
+.toast.success { border-left: 3px solid var(--green); }
+.toast.error { border-left: 3px solid var(--red); }
+@keyframes toastIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+/* Fatura */
+.fatura-preview {
+  background: #fff;
+  color: #111;
+  border-radius: 12px;
+  padding: 36px;
+  font-family: 'DM Sans', sans-serif;
+}
+.fatura-preview h2 { color: #1a1a2e; font-family: 'Syne', sans-serif; }
+.fatura-preview table { width: 100%; margin-top: 16px; border-collapse: collapse; }
+.fatura-preview th { background: #f1f5f9; padding: 8px 12px; text-align: left; font-size: 12px; color: #64748b; }
+.fatura-preview td { padding: 8px 12px; border-top: 1px solid #e2e8f0; font-size: 13px; }
+
+/* Chart */
+.chart-bars { display: flex; align-items: flex-end; gap: 8px; height: 120px; margin-top: 12px; }
+.chart-bar-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.chart-bar { width: 100%; border-radius: 6px 6px 0 0; min-height: 4px; transition: height 0.6s cubic-bezier(.34,1.56,.64,1); }
+.chart-bar-label { font-size: 10px; color: var(--muted); }
+.chart-bar-val { font-size: 10px; color: var(--text); font-weight: 600; }
+
+/* Divider */
+.divider { border: none; border-top: 1px solid var(--border); margin: 20px 0; }
+
+/* Search */
+.search-wrap { position: relative; flex: 1; }
+.search-wrap input { padding-left: 36px; }
+.search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--muted); font-size: 14px; pointer-events: none; }
+
+/* Tabs */
+.tabs { display: flex; gap: 4px; margin-bottom: 20px; background: var(--surface2); border-radius: 12px; padding: 4px; border: 1px solid var(--border); }
+.tab { flex: 1; text-align: center; padding: 8px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; color: var(--muted); transition: all 0.2s; }
+.tab.active { background: var(--card); color: var(--text); box-shadow: 0 2px 8px rgba(0,0,0,0.3); }
+
+/* Progress */
+.progress { background: var(--border); border-radius: 4px; height: 6px; margin-top: 6px; overflow: hidden; }
+.progress-bar { height: 100%; border-radius: 4px; background: var(--accent); transition: width 0.6s ease; }
+.progress-bar.green { background: var(--green); }
+.progress-bar.red { background: var(--red); }
+
+/* Responsive toggle */
+.menu-toggle { display: none; background: none; border: none; color: var(--text); font-size: 22px; cursor: pointer; }
+
+@media (max-width: 768px) {
+  .sidebar { transform: translateX(-100%); }
+  .sidebar.open { transform: translateX(0); }
+  .main { margin-left: 0; }
+  .menu-toggle { display: block; }
+  .stat-grid { grid-template-columns: 1fr 1fr; }
+  .form-grid-2, .form-grid-3, .form-grid-4 { grid-template-columns: 1fr; }
+  .content { padding: 16px; }
+}
+
+.overlay-bg { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 99; display: none; }
+.overlay-bg.open { display: block; }
+</style>
 </head>
-<body class="bg-gray-50 font-sans">
+<body>
 
-    <div class="min-h-screen flex flex-col">
-        <!-- Cabeçalho -->
-        <header class="bg-primary text-white py-4 px-6 shadow-md">
-            <h1 class="text-xl font-bold text-center">Gestão Simples</h1>
-            <p class="text-sm text-center opacity-90">Controle o seu negócio facilmente</p>
-        </header>
+<div class="app">
 
-        <!-- Conteúdo Principal -->
-        <main class="flex-grow p-4 md:p-6 max-w-7xl mx-auto w-full">
-            
-            <!-- Menu de Funcionalidades -->
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-                <button onclick="mostrarSecao('vendas')" class="bg-white p-4 rounded-xl shadow hover:shadow-lg transition-all text-center">
-                    <div class="text-primary text-2xl mb-2">🧾</div>
-                    <h3 class="font-semibold">Registar Venda</h3>
-                </button>
+<!-- Sidebar -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo" id="sidebarLogo">
+    <div id="logoImgWrap" style="display:none;margin-bottom:10px;text-align:center">
+      <img id="logoImgSidebar" src="" alt="Logo" style="max-height:48px;max-width:160px;border-radius:8px;object-fit:contain">
+    </div>
+    <h1 id="sidebarAppName">GestãoPRO</h1>
+    <p>Sistema de Gestão</p>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-label">Principal</div>
+    <div class="nav-item active" onclick="navTo('dashboard', this)">
+      <span class="icon">📊</span> Dashboard
+    </div>
+    <div class="nav-label">Operações</div>
+    <div class="nav-item" onclick="navTo('vendas', this)">
+      <span class="icon">🧾</span> Registar Venda
+    </div>
+    <div class="nav-item" onclick="navTo('estoque', this)">
+      <span class="icon">📦</span> Estoque
+    </div>
+    <div class="nav-item" onclick="navTo('faturas', this)">
+      <span class="icon">📄</span> Faturas
+    </div>
+    <div class="nav-label">Análise</div>
+    <div class="nav-item" onclick="navTo('relatorios', this)">
+      <span class="icon">📈</span> Relatórios
+    </div>
+    <div class="nav-item" onclick="navTo('clientes', this)">
+      <span class="icon">👥</span> Clientes
+    </div>
+    <div class="nav-item" onclick="navTo('fornecedores', this)">
+      <span class="icon">🏭</span> Fornecedores
+    </div>
+    <div class="nav-label">Configurações</div>
+    <div class="nav-item" onclick="navTo('configuracoes', this)">
+      <span class="icon">⚙️</span> Configurações
+    </div>
+  </nav>
+  <div class="sidebar-footer">Desenvolvido por 90 Creations</div>
+</aside>
+<div class="overlay-bg" id="overlayBg" onclick="closeSidebar()"></div>
 
-                <button onclick="mostrarSecao('estoque')" class="bg-white p-4 rounded-xl shadow hover:shadow-lg transition-all text-center">
-                    <div class="text-primary text-2xl mb-2">📦</div>
-                    <h3 class="font-semibold">Controle de Estoque</h3>
-                </button>
+<!-- Main Content -->
+<div class="main">
+  <div class="topbar">
+    <div>
+      <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+      <div class="topbar-title" id="topbarTitle">Dashboard</div>
+      <div class="topbar-sub" id="topbarSub">Visão geral do seu negócio</div>
+    </div>
+    <div class="topbar-right">
+      <span class="badge" id="dateBadge"></span>
+    </div>
+  </div>
 
-                <button onclick="mostrarSecao('faturas')" class="bg-white p-4 rounded-xl shadow hover:shadow-lg transition-all text-center">
-                    <div class="text-primary text-2xl mb-2">📄</div>
-                    <h3 class="font-semibold">Emitir Fatura</h3>
-                </button>
+  <div class="content">
 
-                <button onclick="mostrarSecao('relatorios')" class="bg-white p-4 rounded-xl shadow hover:shadow-lg transition-all text-center">
-                    <div class="text-primary text-2xl mb-2">📊</div>
-                    <h3 class="font-semibold">Relatórios</h3>
-                </button>
-            </div>
-
-            <!-- Área de Conteúdo Dinâmico -->
-            <div class="bg-white rounded-2xl shadow p-4 md:p-6 min-h-[400px]">
-                
-                <!-- Seção Vendas -->
-                <div id="vendas" class="secao">
-                    <h2 class="text-xl font-bold mb-4 text-gray-800">Registro de Vendas e Despesas</h2>
-                    <div class="grid md:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Descrição</label>
-                            <input type="text" placeholder="Ex: Venda de camisa" class="w-full p-2 border border-gray-300 rounded-lg">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Valor (Kz)</label>
-                            <input type="number" placeholder="0,00" class="w-full p-2 border border-gray-300 rounded-lg">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Tipo</label>
-                            <select class="w-full p-2 border border-gray-300 rounded-lg">
-                                <option>Venda</option>
-                                <option>Despesa</option>
-                            </select>
-                        </div>
-                        <div class="flex items-end">
-                            <button class="w-full bg-primary text-white py-2 rounded-lg font-medium">Registar</button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Seção Estoque -->
-                <div id="estoque" class="secao hidden">
-                    <h2 class="text-xl font-bold mb-4 text-gray-800">Controle de Estoque</h2>
-                    <div class="grid md:grid-cols-3 gap-4 mb-4">
-                        <input type="text" placeholder="Nome do produto" class="p-2 border border-gray-300 rounded-lg">
-                        <input type="number" placeholder="Quantidade" class="p-2 border border-gray-300 rounded-lg">
-                        <input type="number" placeholder="Preço (Kz)" class="p-2 border border-gray-300 rounded-lg">
-                    </div>
-                    <button class="bg-primary text-white py-2 px-6 rounded-lg font-medium">Adicionar Produto</button>
-                    
-                    <div class="mt-6">
-                        <h4 class="font-semibold mb-2">Produtos Cadastrados</h4>
-                        <div class="border rounded-lg overflow-hidden">
-                            <table class="w-full text-sm">
-                                <thead class="bg-gray-100">
-                                    <tr>
-                                        <th class="p-2 text-left">Produto</th>
-                                        <th class="p-2 text-left">Qtd</th>
-                                        <th class="p-2 text-left">Preço</th>
-                                        <th class="p-2 text-left">Ações</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr class="border-t">
-                                        <td class="p-2">Exemplo Produto</td>
-                                        <td class="p-2">50</td>
-                                        <td class="p-2">1.500 Kz</td>
-                                        <td class="p-2 text-primary">Editar / Remover</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Seção Faturas -->
-                <div id="faturas" class="secao hidden">
-                    <h2 class="text-xl font-bold mb-4 text-gray-800">Faturas e Recibos Digitais</h2>
-                    <div class="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center">
-                        <div class="text-6xl mb-4">🧾</div>
-                        <p class="mb-4 text-gray-600">Gere recibos personalizados com os dados do cliente e produtos.</p>
-                        <button class="bg-primary text-white py-2 px-6 rounded-lg font-medium">Criar Nova Fatura</button>
-                    </div>
-                </div>
-
-                <!-- Seção Relatórios -->
-                <div id="relatorios" class="secao hidden">
-                    <h2 class="text-xl font-bold mb-4 text-gray-800">Relatórios Financeiros</h2>
-                    <div class="grid grid-cols-2 gap-4 mb-6">
-                        <div class="bg-green-50 p-4 rounded-xl border border-green-200">
-                            <p class="text-sm text-green-700">Total de Vendas</p>
-                            <p class="text-2xl font-bold text-green-700">0 Kz</p>
-                        </div>
-                        <div class="bg-red-50 p-4 rounded-xl border border-red-200">
-                            <p class="text-sm text-red-700">Total de Despesas</p>
-                            <p class="text-2xl font-bold text-red-700">0 Kz</p>
-                        </div>
-                    </div>
-                    <button class="w-full border border-primary text-primary py-2 rounded-lg font-medium">Exportar Relatório</button>
-                </div>
-
-            </div>
-        </main>
-
-        <!-- Rodapé -->
-        <footer class="bg-gray-900 text-white text-center py-4 mt-8">
-            <p>Desenvolvido por 90 Creations</p>
-        </footer>
+    <!-- ===== DASHBOARD ===== -->
+    <div class="section active" id="sec-dashboard">
+      <div class="stat-grid" id="dashStats"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+        <div class="card">
+          <div class="card-title"><span class="dot"></span> Vendas dos últimos 7 dias</div>
+          <div class="chart-bars" id="chartBars"></div>
+        </div>
+        <div class="card">
+          <div class="card-title"><span class="dot" style="background:var(--accent2)"></span> Últimas Vendas</div>
+          <div id="dashLastSales"></div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px">
+        <div class="card">
+          <div class="card-title"><span class="dot" style="background:var(--yellow)"></span> Produtos com Estoque Baixo</div>
+          <div id="lowStockList"></div>
+        </div>
+        <div class="card">
+          <div class="card-title"><span class="dot" style="background:var(--green)"></span> Top Produtos Vendidos</div>
+          <div id="topProducts"></div>
+        </div>
+      </div>
     </div>
 
-    <script>
-        // Função para alternar entre as seções
-        function mostrarSecao(id) {
-            // Esconder todas as seções
-            document.querySelectorAll('.secao').forEach(sec => {
-                sec.classList.add('hidden');
-            });
-            // Mostrar a selecionada
-            document.getElementById(id).classList.remove('hidden');
-        }
-        
-        // Por padrão, mostrar vendas
-        mostrarSecao('vendas');
-    </script>
+    <!-- ===== VENDAS ===== -->
+    <div class="section" id="sec-vendas">
+      <div class="card">
+        <div class="card-title"><span class="dot"></span> Registar Nova Venda</div>
+        <div class="form-grid form-grid-3">
+          <div class="field">
+            <label>Cliente</label>
+            <input type="text" id="vCliente" placeholder="Nome do cliente" list="clientList">
+            <datalist id="clientList"></datalist>
+          </div>
+          <div class="field">
+            <label>Data</label>
+            <input type="date" id="vData">
+          </div>
+          <div class="field">
+            <label>Forma de Pagamento</label>
+            <select id="vPagamento">
+              <option>Dinheiro</option>
+              <option>Transferência</option>
+              <option>Multicaixa</option>
+              <option>Crédito</option>
+            </select>
+          </div>
+        </div>
+        <hr class="divider">
+        <div class="card-title"><span class="dot" style="background:var(--accent2)"></span> Itens da Venda</div>
+        <div id="itensVenda"></div>
+        <button class="btn btn-ghost btn-sm" onclick="addItemVenda()" style="margin-top:12px">+ Adicionar Item</button>
+        <hr class="divider">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px">
+          <div>
+            <span style="color:var(--muted);font-size:12px">TOTAL DA VENDA</span>
+            <div style="font-size:28px;font-weight:800;color:var(--accent);font-family:'Syne',sans-serif" id="totalVenda">0 Kz</div>
+          </div>
+          <div style="display:flex;gap:10px">
+            <button class="btn btn-ghost" onclick="limparVenda()">🗑 Limpar</button>
+            <button class="btn btn-primary" onclick="registarVenda()">✓ Registar Venda</button>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title"><span class="dot"></span> Histórico de Vendas</div>
+        <div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap">
+          <div class="search-wrap">
+            <span class="search-icon">🔍</span>
+            <input type="text" placeholder="Buscar por cliente ou produto..." oninput="renderVendasTable(this.value)" style="padding-left:36px">
+          </div>
+          <select onchange="renderVendasTable('',this.value)" id="filtroVenda" style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px 14px;color:var(--text);font-family:'DM Sans',sans-serif">
+            <option value="">Todos os pagamentos</option>
+            <option>Dinheiro</option>
+            <option>Transferência</option>
+            <option>Multicaixa</option>
+            <option>Crédito</option>
+          </select>
+        </div>
+        <div class="table-wrap" id="vendasTable"></div>
+      </div>
+    </div>
 
+    <!-- ===== ESTOQUE ===== -->
+    <div class="section" id="sec-estoque">
+      <div class="card">
+        <div class="card-title"><span class="dot"></span> Cadastrar Produto</div>
+        <div class="form-grid form-grid-4">
+          <div class="field">
+            <label>Nome do Produto</label>
+            <input type="text" id="eNome" placeholder="Ex: Camisa Polo">
+          </div>
+          <div class="field">
+            <label>Categoria</label>
+            <select id="eCategoria">
+              <option>Geral</option>
+              <option>Vestuário</option>
+              <option>Alimentos</option>
+              <option>Electrónicos</option>
+              <option>Beleza</option>
+              <option>Casa</option>
+              <option>Outro</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Quantidade</label>
+            <input type="number" id="eQtd" placeholder="0" min="0">
+          </div>
+          <div class="field">
+            <label>Custo (Kz)</label>
+            <input type="number" id="eCusto" placeholder="0" min="0">
+          </div>
+          <div class="field">
+            <label>Preço de Venda (Kz)</label>
+            <input type="number" id="ePreco" placeholder="0" min="0">
+          </div>
+          <div class="field">
+            <label>Estoque Mínimo</label>
+            <input type="number" id="eMin" placeholder="5" min="0">
+          </div>
+          <div class="field">
+            <label>Código / SKU</label>
+            <input type="text" id="eSku" placeholder="Auto">
+          </div>
+          <div class="field" style="display:flex;align-items:flex-end">
+            <button class="btn btn-primary btn-full" onclick="cadastrarProduto()">+ Cadastrar Produto</button>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title"><span class="dot"></span> Produtos em Estoque</div>
+        <div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap">
+          <div class="search-wrap" style="flex:1">
+            <span class="search-icon">🔍</span>
+            <input type="text" placeholder="Buscar produto..." oninput="renderEstoqueTable(this.value)">
+          </div>
+          <select onchange="renderEstoqueTable('',this.value)" style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px 14px;color:var(--text);font-family:'DM Sans',sans-serif">
+            <option value="">Todas as categorias</option>
+            <option>Geral</option>
+            <option>Vestuário</option>
+            <option>Alimentos</option>
+            <option>Electrónicos</option>
+            <option>Beleza</option>
+            <option>Casa</option>
+            <option>Outro</option>
+          </select>
+        </div>
+        <div class="table-wrap" id="estoqueTable"></div>
+      </div>
+    </div>
+
+    <!-- ===== FATURAS ===== -->
+    <div class="section" id="sec-faturas">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+        <div>
+          <div class="card">
+            <div class="card-title"><span class="dot"></span> Emitir Nova Fatura</div>
+            <div class="form-grid">
+              <div class="field">
+                <label>Nome do Cliente</label>
+                <input type="text" id="fCliente" placeholder="Nome completo" list="clientListF">
+                <datalist id="clientListF"></datalist>
+              </div>
+              <div class="field">
+                <label>NIF (opcional)</label>
+                <input type="text" id="fNif" placeholder="000000000">
+              </div>
+              <div class="field">
+                <label>Endereço (opcional)</label>
+                <input type="text" id="fEndereco" placeholder="Rua, Bairro, Cidade">
+              </div>
+            </div>
+            <hr class="divider">
+            <div class="card-title" style="font-size:13px"><span class="dot" style="background:var(--accent2)"></span> Produtos</div>
+            <div id="itensFatura"></div>
+            <button class="btn btn-ghost btn-sm" onclick="addItemFatura()" style="margin-top:8px">+ Adicionar Produto</button>
+            <hr class="divider">
+            <div class="field" style="margin-bottom:12px">
+              <label>Observações</label>
+              <textarea id="fObs" rows="2" placeholder="Obrigado pela preferência!" style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px 14px;color:var(--text);font-family:'DM Sans',sans-serif;width:100%;resize:vertical;outline:none"></textarea>
+            </div>
+            <button class="btn btn-primary btn-full" onclick="gerarFatura()">🖨 Gerar & Imprimir Fatura</button>
+          </div>
+        </div>
+        <div>
+          <div class="card">
+            <div class="card-title"><span class="dot"></span> Histórico de Faturas</div>
+            <div class="table-wrap" id="faturasTable"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== RELATÓRIOS ===== -->
+    <div class="section" id="sec-relatorios">
+      <div class="tabs">
+        <div class="tab active" onclick="relTab('financeiro',this)">Financeiro</div>
+        <div class="tab" onclick="relTab('estoque',this)">Estoque</div>
+        <div class="tab" onclick="relTab('produtos',this)">Produtos</div>
+      </div>
+      <div id="rel-financeiro">
+        <div class="stat-grid" id="relStats"></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+          <div class="card">
+            <div class="card-title"><span class="dot"></span> Vendas por Período</div>
+            <div style="display:flex;gap:8px;margin-bottom:12px">
+              <input type="date" id="relDe" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:8px 12px;color:var(--text);font-family:'DM Sans',sans-serif;flex:1">
+              <input type="date" id="relAte" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:8px 12px;color:var(--text);font-family:'DM Sans',sans-serif;flex:1">
+              <button class="btn btn-ghost btn-sm" onclick="filtrarRel()">Filtrar</button>
+            </div>
+            <div class="table-wrap" id="relVendasTable"></div>
+          </div>
+          <div class="card">
+            <div class="card-title"><span class="dot" style="background:var(--accent2)"></span> Vendas por Pagamento</div>
+            <div id="relPagChart"></div>
+          </div>
+        </div>
+        <button class="btn btn-green" style="margin-top:16px" onclick="exportarCSV()">⬇ Exportar CSV</button>
+      </div>
+      <div id="rel-estoque" style="display:none">
+        <div class="card">
+          <div class="card-title"><span class="dot"></span> Relatório de Estoque</div>
+          <div class="table-wrap" id="relEstoqueTable"></div>
+        </div>
+      </div>
+      <div id="rel-produtos" style="display:none">
+        <div class="card">
+          <div class="card-title"><span class="dot"></span> Produtos Mais Vendidos</div>
+          <div id="relProdutosChart"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== CLIENTES ===== -->
+    <div class="section" id="sec-clientes">
+      <div class="card">
+        <div class="card-title"><span class="dot"></span> Cadastrar Cliente</div>
+        <div class="form-grid form-grid-3">
+          <div class="field"><label>Nome</label><input type="text" id="cNome" placeholder="Nome completo"></div>
+          <div class="field"><label>Telefone</label><input type="text" id="cTel" placeholder="+244 ..."></div>
+          <div class="field"><label>Email</label><input type="email" id="cEmail" placeholder="email@exemplo.com"></div>
+          <div class="field"><label>NIF (opcional)</label><input type="text" id="cNif" placeholder="000000000"></div>
+          <div class="field"><label>Endereço</label><input type="text" id="cEnd" placeholder="Bairro, Cidade"></div>
+          <div class="field" style="display:flex;align-items:flex-end">
+            <button class="btn btn-primary btn-full" onclick="cadastrarCliente()">+ Cadastrar</button>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title"><span class="dot"></span> Lista de Clientes</div>
+        <div class="table-wrap" id="clientesTable"></div>
+      </div>
+    </div>
+
+    <!-- ===== FORNECEDORES ===== -->
+    <div class="section" id="sec-fornecedores">
+      <div class="card">
+        <div class="card-title"><span class="dot" style="background:var(--yellow)"></span> Cadastrar Fornecedor</div>
+        <div class="form-grid form-grid-3">
+          <div class="field"><label>Nome / Empresa</label><input type="text" id="fNome" placeholder="Ex: Distribuidora ABC"></div>
+          <div class="field"><label>Pessoa de Contacto</label><input type="text" id="fContacto" placeholder="Nome do responsável"></div>
+          <div class="field"><label>Telefone</label><input type="text" id="fTelefone" placeholder="+244 9XX XXX XXX"></div>
+          <div class="field"><label>Email</label><input type="email" id="fEmail" placeholder="fornecedor@email.com"></div>
+          <div class="field"><label>WhatsApp</label><input type="text" id="fWhatsapp" placeholder="+244 9XX XXX XXX"></div>
+          <div class="field"><label>NIF / NIPC</label><input type="text" id="fNifF" placeholder="000000000"></div>
+          <div class="field"><label>Endereço</label><input type="text" id="fEnderecoF" placeholder="Rua, Bairro"></div>
+          <div class="field"><label>Cidade / Província</label><input type="text" id="fCidade" placeholder="Ex: Luanda"></div>
+          <div class="field"><label>País</label><input type="text" id="fPais" placeholder="Angola" value="Angola"></div>
+          <div class="field"><label>Tipo de Produto Fornecido</label>
+            <select id="fTipoProd">
+              <option>Vestuário</option>
+              <option>Alimentos</option>
+              <option>Electrónicos</option>
+              <option>Beleza e Cosméticos</option>
+              <option>Material de Escritório</option>
+              <option>Casa e Decoração</option>
+              <option>Matéria-Prima</option>
+              <option>Serviços</option>
+              <option>Outro</option>
+            </select>
+          </div>
+          <div class="field"><label>Prazo de Entrega (dias)</label><input type="number" id="fPrazo" placeholder="Ex: 7" min="1"></div>
+          <div class="field"><label>Condições de Pagamento</label>
+            <select id="fCondicoes">
+              <option>À vista</option>
+              <option>30 dias</option>
+              <option>60 dias</option>
+              <option>90 dias</option>
+              <option>Negociável</option>
+            </select>
+          </div>
+        </div>
+        <div class="field" style="margin-top:16px"><label>Observações</label>
+          <textarea id="fObsF" rows="2" placeholder="Informações adicionais sobre o fornecedor..." style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px 14px;color:var(--text);font-family:'DM Sans',sans-serif;width:100%;resize:vertical;outline:none"></textarea>
+        </div>
+        <div style="margin-top:16px">
+          <button class="btn btn-primary" onclick="cadastrarFornecedor()">+ Cadastrar Fornecedor</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title"><span class="dot" style="background:var(--yellow)"></span> Lista de Fornecedores</div>
+        <div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap">
+          <div class="search-wrap" style="flex:1">
+            <span class="search-icon">🔍</span>
+            <input type="text" placeholder="Buscar fornecedor..." oninput="renderFornecedoresTable(this.value)">
+          </div>
+          <select onchange="renderFornecedoresTable('',this.value)" style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px 14px;color:var(--text);font-family:'DM Sans',sans-serif">
+            <option value="">Todos os tipos</option>
+            <option>Vestuário</option><option>Alimentos</option><option>Electrónicos</option>
+            <option>Beleza e Cosméticos</option><option>Material de Escritório</option>
+            <option>Casa e Decoração</option><option>Matéria-Prima</option><option>Serviços</option><option>Outro</option>
+          </select>
+        </div>
+        <div class="table-wrap" id="fornecedoresTable"></div>
+      </div>
+    </div>
+
+    <!-- ===== CONFIGURAÇÕES ===== -->
+    <div class="section" id="sec-configuracoes">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+        <div>
+          <div class="card">
+            <div class="card-title"><span class="dot" style="background:var(--accent2)"></span> Logotipo do Negócio</div>
+            <div id="logoPreviewWrap" style="display:none;margin-bottom:16px;text-align:center">
+              <img id="logoPreview" src="" alt="Logo" style="max-height:80px;max-width:200px;border-radius:10px;object-fit:contain;border:1px solid var(--border);padding:8px">
+            </div>
+            <div style="border:2px dashed var(--border);border-radius:12px;padding:32px;text-align:center;cursor:pointer;transition:border-color 0.2s" onclick="document.getElementById('logoInput').click()" id="logoDropZone">
+              <div style="font-size:36px;margin-bottom:8px">🖼️</div>
+              <p style="color:var(--muted);font-size:13px">Clique para carregar o logotipo</p>
+              <p style="color:var(--muted);font-size:11px;margin-top:4px">PNG, JPG ou SVG — recomendado 200×80px</p>
+              <input type="file" id="logoInput" accept="image/*" style="display:none" onchange="carregarLogo(this)">
+            </div>
+            <div style="display:flex;gap:10px;margin-top:14px">
+              <button class="btn btn-ghost btn-sm" onclick="removerLogo()">🗑 Remover Logo</button>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-title"><span class="dot"></span> Dados do Negócio</div>
+            <div class="form-grid">
+              <div class="field"><label>Nome do Negócio</label><input type="text" id="cfgNome" placeholder="Ex: Loja da Maria"></div>
+              <div class="field"><label>NIF / NIPC</label><input type="text" id="cfgNif" placeholder="000000000"></div>
+              <div class="field"><label>Telefone</label><input type="text" id="cfgTel" placeholder="+244 ..."></div>
+              <div class="field"><label>Email</label><input type="email" id="cfgEmail" placeholder="loja@email.com"></div>
+              <div class="field"><label>Endereço</label><input type="text" id="cfgEnd" placeholder="Rua, Bairro, Cidade"></div>
+            </div>
+            <div style="display:flex;gap:10px;margin-top:16px">
+              <button class="btn btn-primary" onclick="salvarConfigs()">💾 Guardar Configurações</button>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="card">
+            <div class="card-title"><span class="dot" style="background:var(--green)"></span> Mensagem de Agradecimento na Fatura</div>
+            <div class="field">
+              <label>Mensagem padrão</label>
+              <textarea id="cfgMsg" rows="4" placeholder="Ex: Obrigado pela sua preferência! Volte sempre." style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px 14px;color:var(--text);font-family:'DM Sans',sans-serif;width:100%;resize:vertical;outline:none"></textarea>
+            </div>
+            <p style="font-size:11px;color:var(--muted);margin-top:8px">Esta mensagem aparecerá automaticamente em todas as faturas.</p>
+            <button class="btn btn-primary" onclick="salvarConfigs()" style="margin-top:14px">💾 Guardar</button>
+          </div>
+
+          <div class="card">
+            <div class="card-title"><span class="dot" style="background:var(--red)"></span> Prévia da Fatura</div>
+            <div style="background:var(--surface2);border-radius:10px;padding:16px;font-size:12px;color:var(--muted);text-align:center">
+              <p>As configurações acima serão aplicadas em todas as faturas emitidas.</p>
+              <p style="margin-top:8px">O rodapé incluirá sempre:<br><b style="color:var(--text)">Gerado pelo Sistema de Gestão — 90 Creations</b></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+</div><!-- /app -->
+
+<!-- Modal de Edição de Produto -->
+<div class="modal-overlay" id="editModal">
+
+<!-- Modal Ver Fornecedor -->
+<div class="modal-overlay" id="fornecedorModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">🏭 Detalhes do Fornecedor</div>
+      <button class="modal-close" onclick="closeModal('fornecedorModal')">✕</button>
+    </div>
+    <div id="fornecedorDetalhes"></div>
+    <div style="display:flex;gap:10px;margin-top:20px;justify-content:flex-end">
+      <button class="btn btn-ghost" onclick="closeModal('fornecedorModal')">Fechar</button>
+    </div>
+  </div>
+</div>
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">✏️ Editar Produto</div>
+      <button class="modal-close" onclick="closeModal('editModal')">✕</button>
+    </div>
+    <div class="form-grid form-grid-2">
+      <div class="field"><label>Nome</label><input type="text" id="editNome"></div>
+      <div class="field"><label>Categoria</label><select id="editCat"><option>Geral</option><option>Vestuário</option><option>Alimentos</option><option>Electrónicos</option><option>Beleza</option><option>Casa</option><option>Outro</option></select></div>
+      <div class="field"><label>Quantidade</label><input type="number" id="editQtd"></div>
+      <div class="field"><label>Custo (Kz)</label><input type="number" id="editCusto"></div>
+      <div class="field"><label>Preço (Kz)</label><input type="number" id="editPreco"></div>
+      <div class="field"><label>Estoque Mínimo</label><input type="number" id="editMin"></div>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:20px;justify-content:flex-end">
+      <button class="btn btn-ghost" onclick="closeModal('editModal')">Cancelar</button>
+      <button class="btn btn-primary" onclick="salvarEdicao()">💾 Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Fatura Print -->
+<div class="modal-overlay" id="faturaModal">
+  <div class="modal" style="max-width:740px">
+    <div class="modal-header">
+      <div class="modal-title">📄 Fatura Gerada</div>
+      <button class="modal-close" onclick="closeModal('faturaModal')">✕</button>
+    </div>
+    <div id="faturaContent"></div>
+    <div style="display:flex;gap:10px;margin-top:20px;justify-content:flex-end">
+      <button class="btn btn-ghost" onclick="closeModal('faturaModal')">Fechar</button>
+      <button class="btn btn-primary" onclick="printFatura()">🖨 Imprimir</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast Container -->
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+// ===================== DATABASE =====================
+const DB = {
+  get: (k) => JSON.parse(localStorage.getItem('gp_'+k) || '[]'),
+  set: (k, v) => localStorage.setItem('gp_'+k, JSON.stringify(v)),
+  genId: () => Date.now().toString(36) + Math.random().toString(36).substr(2,5)
+};
+
+// ===================== NAV =====================
+function navTo(section, el) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('sec-'+section).classList.add('active');
+  if(el) el.classList.add('active');
+  const titles = {dashboard:'Dashboard',vendas:'Registar Venda',estoque:'Controle de Estoque',faturas:'Faturas',relatorios:'Relatórios',clientes:'Clientes',fornecedores:'Fornecedores',configuracoes:'Configurações'};
+  const subs = {dashboard:'Visão geral do seu negócio',vendas:'Registar e acompanhar vendas',estoque:'Gerir produtos e inventário',faturas:'Emitir e gerir faturas',relatorios:'Análise financeira detalhada',clientes:'Base de clientes',fornecedores:'Gerir fornecedores e contactos',configuracoes:'Logotipo, dados e preferências'};
+  document.getElementById('topbarTitle').textContent = titles[section]||section;
+  document.getElementById('topbarSub').textContent = subs[section]||'';
+  closeSidebar();
+  if(section==='dashboard') renderDashboard();
+  if(section==='vendas') { renderVendasTable(); updateTotalVenda(); }
+  if(section==='estoque') renderEstoqueTable();
+  if(section==='faturas') renderFaturasTable();
+  if(section==='relatorios') renderRelatorios();
+  if(section==='clientes') { renderClientesTable(); updateClientDatalist(); }
+  if(section==='fornecedores') renderFornecedoresTable();
+  if(section==='configuracoes') carregarConfigs();
+}
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('overlayBg').classList.toggle('open');
+}
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('overlayBg').classList.remove('open');
+}
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+// ===================== TOAST =====================
+function toast(msg, type='success') {
+  const t = document.createElement('div');
+  t.className = `toast ${type}`;
+  t.innerHTML = `<span>${type==='success'?'✓':'✕'}</span> ${msg}`;
+  document.getElementById('toastContainer').appendChild(t);
+  setTimeout(()=>t.remove(), 3500);
+}
+
+// ===================== UTILS =====================
+const fmt = n => Number(n).toLocaleString('pt-AO') + ' Kz';
+const today = () => new Date().toISOString().split('T')[0];
+
+function init() {
+  document.getElementById('dateBadge').textContent = new Date().toLocaleDateString('pt-AO',{day:'2-digit',month:'short',year:'numeric'});
+  document.getElementById('vData').value = today();
+  addItemVenda();
+  addItemFatura();
+  carregarConfigs();
+  aplicarLogoSidebar();
+  renderDashboard();
+  updateClientDatalist();
+}
+
+// ===================== VENDAS =====================
+let editingId = null;
+
+function addItemVenda() {
+  const c = document.getElementById('itensVenda');
+  const produtos = DB.get('produtos');
+  const row = document.createElement('div');
+  row.className = 'form-grid form-grid-4';
+  row.style.marginBottom = '10px';
+  row.innerHTML = `
+    <div class="field">
+      <label>Produto</label>
+      <select onchange="autoFillPreco(this)" style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px 14px;color:var(--text);font-family:'DM Sans',sans-serif;width:100%">
+        <option value="">-- Selecionar --</option>
+        ${produtos.map(p=>`<option value="${p.id}" data-preco="${p.preco}">${p.nome}</option>`).join('')}
+        <option value="__manual__">Outro (manual)</option>
+      </select>
+    </div>
+    <div class="field"><label>Descrição</label><input type="text" placeholder="Descrição"></div>
+    <div class="field"><label>Qtd</label><input type="number" value="1" min="1" oninput="updateTotalVenda()"></div>
+    <div class="field" style="display:flex;gap:6px;align-items:flex-end">
+      <div style="flex:1"><label>Preço (Kz)</label><input type="number" value="0" min="0" oninput="updateTotalVenda()"></div>
+      <button class="btn btn-danger btn-sm" style="margin-bottom:1px" onclick="this.closest('.form-grid').remove();updateTotalVenda()">✕</button>
+    </div>
+  `;
+  c.appendChild(row);
+}
+
+function autoFillPreco(sel) {
+  const row = sel.closest('.form-grid');
+  const precoInput = row.querySelectorAll('input')[2];
+  const descInput = row.querySelectorAll('input')[0];
+  if(sel.value && sel.value !== '__manual__') {
+    precoInput.value = sel.selectedOptions[0].dataset.preco || 0;
+    descInput.value = sel.selectedOptions[0].text;
+  }
+  updateTotalVenda();
+}
+
+function updateTotalVenda() {
+  let total = 0;
+  document.querySelectorAll('#itensVenda .form-grid').forEach(row => {
+    const inputs = row.querySelectorAll('input[type=number]');
+    if(inputs.length>=2) total += (parseFloat(inputs[0].value)||0) * (parseFloat(inputs[1].value)||0);
+  });
+  document.getElementById('totalVenda').textContent = fmt(total);
+}
+
+function limparVenda() {
+  document.getElementById('itensVenda').innerHTML = '';
+  document.getElementById('vCliente').value = '';
+  document.getElementById('vData').value = today();
+  addItemVenda();
+  updateTotalVenda();
+}
+
+function registarVenda() {
+  const cliente = document.getElementById('vCliente').value.trim() || 'Cliente Geral';
+  const data = document.getElementById('vData').value || today();
+  const pagamento = document.getElementById('vPagamento').value;
+  const itens = [];
+  let total = 0;
+  document.querySelectorAll('#itensVenda .form-grid').forEach(row => {
+    const sel = row.querySelector('select');
+    const inputs = row.querySelectorAll('input');
+    const desc = inputs[0].value.trim();
+    const qtd = parseFloat(inputs[1].value)||0;
+    const preco = parseFloat(inputs[2].value)||0;
+    if(desc && qtd>0 && preco>=0) {
+      itens.push({prodId: sel?sel.value:'', desc, qtd, preco, sub: qtd*preco});
+      total += qtd*preco;
+      // Baixar estoque
+      if(sel && sel.value && sel.value !== '__manual__') {
+        const prods = DB.get('produtos');
+        const idx = prods.findIndex(p=>p.id===sel.value);
+        if(idx>=0) { prods[idx].qtd = Math.max(0, (prods[idx].qtd||0) - qtd); DB.set('produtos', prods); }
+      }
+    }
+  });
+  if(!itens.length) { toast('Adicione pelo menos um item válido!', 'error'); return; }
+  const vendas = DB.get('vendas');
+  vendas.push({ id: DB.genId(), cliente, data, pagamento, itens, total, ts: Date.now() });
+  DB.set('vendas', vendas);
+  toast(`Venda de ${fmt(total)} registada com sucesso!`);
+  limparVenda();
+  renderVendasTable();
+}
+
+function renderVendasTable(q='', filtro='') {
+  let vendas = DB.get('vendas').reverse();
+  if(q) vendas = vendas.filter(v=>v.cliente.toLowerCase().includes(q.toLowerCase())||v.itens.some(i=>i.desc.toLowerCase().includes(q.toLowerCase())));
+  if(filtro) vendas = vendas.filter(v=>v.pagamento===filtro);
+  const el = document.getElementById('vendasTable');
+  if(!vendas.length) { el.innerHTML = `<div class="empty-state"><div class="icon">🧾</div><p>Nenhuma venda registada ainda</p></div>`; return; }
+  el.innerHTML = `<table><thead><tr><th>Data</th><th>Cliente</th><th>Itens</th><th>Pagamento</th><th>Total</th><th>Ações</th></tr></thead><tbody>
+    ${vendas.map(v=>`<tr>
+      <td>${v.data}</td>
+      <td><b>${v.cliente}</b></td>
+      <td><span class="pill pill-blue">${v.itens.length} item(s)</span></td>
+      <td>${v.pagamento}</td>
+      <td style="font-weight:700;color:var(--green)">${fmt(v.total)}</td>
+      <td style="display:flex;gap:6px">
+        <button class="btn btn-ghost btn-sm" onclick="verVenda('${v.id}')">Ver</button>
+        <button class="btn btn-danger btn-sm" onclick="removerVenda('${v.id}')">✕</button>
+      </td>
+    </tr>`).join('')}
+  </tbody></table>`;
+}
+
+function verVenda(id) {
+  const v = DB.get('vendas').find(x=>x.id===id);
+  if(!v) return;
+  alert(`Venda #${v.id}\nCliente: ${v.cliente}\nData: ${v.data}\nPagamento: ${v.pagamento}\n\nItens:\n${v.itens.map(i=>`  ${i.desc} x${i.qtd} = ${fmt(i.sub)}`).join('\n')}\n\nTotal: ${fmt(v.total)}`);
+}
+
+function removerVenda(id) {
+  if(!confirm('Remover esta venda?')) return;
+  DB.set('vendas', DB.get('vendas').filter(v=>v.id!==id));
+  renderVendasTable();
+  toast('Venda removida');
+}
+
+// ===================== ESTOQUE =====================
+function cadastrarProduto() {
+  const nome = document.getElementById('eNome').value.trim();
+  if(!nome) { toast('Nome do produto é obrigatório!', 'error'); return; }
+  const qtd = parseInt(document.getElementById('eQtd').value)||0;
+  const preco = parseFloat(document.getElementById('ePreco').value)||0;
+  const custo = parseFloat(document.getElementById('eCusto').value)||0;
+  const cat = document.getElementById('eCategoria').value;
+  const min = parseInt(document.getElementById('eMin').value)||5;
+  let sku = document.getElementById('eSku').value.trim() || ('SKU-'+Date.now().toString(36).toUpperCase());
+  const prods = DB.get('produtos');
+  prods.push({ id: DB.genId(), nome, categoria: cat, qtd, preco, custo, min, sku, ts: Date.now() });
+  DB.set('produtos', prods);
+  toast(`Produto "${nome}" cadastrado!`);
+  document.getElementById('eNome').value=''; document.getElementById('eQtd').value=''; document.getElementById('ePreco').value=''; document.getElementById('eCusto').value=''; document.getElementById('eSku').value='';
+  renderEstoqueTable();
+  updateClientDatalist();
+}
+
+function renderEstoqueTable(q='', cat='') {
+  let prods = DB.get('produtos');
+  if(q) prods = prods.filter(p=>p.nome.toLowerCase().includes(q.toLowerCase())||p.sku.toLowerCase().includes(q.toLowerCase()));
+  if(cat) prods = prods.filter(p=>p.categoria===cat);
+  const el = document.getElementById('estoqueTable');
+  if(!prods.length) { el.innerHTML = `<div class="empty-state"><div class="icon">📦</div><p>Nenhum produto cadastrado ainda</p></div>`; return; }
+  el.innerHTML = `<table><thead><tr><th>SKU</th><th>Produto</th><th>Categoria</th><th>Qtd</th><th>Custo</th><th>Preço</th><th>Margem</th><th>Status</th><th>Ações</th></tr></thead><tbody>
+    ${prods.map(p=>{
+      const margem = p.custo>0 ? Math.round(((p.preco-p.custo)/p.custo)*100) : 0;
+      const status = p.qtd<=0 ? ['pill-red','Sem Estoque'] : p.qtd<=p.min ? ['pill-yellow','Baixo'] : ['pill-green','OK'];
+      return `<tr>
+        <td style="color:var(--muted);font-size:11px">${p.sku}</td>
+        <td><b>${p.nome}</b></td>
+        <td>${p.categoria}</td>
+        <td><b>${p.qtd}</b></td>
+        <td>${fmt(p.custo)}</td>
+        <td style="color:var(--accent)">${fmt(p.preco)}</td>
+        <td><span class="pill ${margem>=20?'pill-green':'pill-yellow'}">${margem}%</span></td>
+        <td><span class="pill ${status[0]}">${status[1]}</span></td>
+        <td style="display:flex;gap:4px">
+          <button class="btn btn-ghost btn-sm" onclick="editarProduto('${p.id}')">✏️</button>
+          <button class="btn btn-danger btn-sm" onclick="removerProduto('${p.id}')">✕</button>
+        </td>
+      </tr>`;
+    }).join('')}
+  </tbody></table>`;
+}
+
+function editarProduto(id) {
+  const p = DB.get('produtos').find(x=>x.id===id);
+  if(!p) return;
+  editingId = id;
+  document.getElementById('editNome').value = p.nome;
+  document.getElementById('editCat').value = p.categoria;
+  document.getElementById('editQtd').value = p.qtd;
+  document.getElementById('editCusto').value = p.custo;
+  document.getElementById('editPreco').value = p.preco;
+  document.getElementById('editMin').value = p.min;
+  document.getElementById('editModal').classList.add('open');
+}
+
+function salvarEdicao() {
+  const prods = DB.get('produtos');
+  const idx = prods.findIndex(p=>p.id===editingId);
+  if(idx<0) return;
+  prods[idx].nome = document.getElementById('editNome').value;
+  prods[idx].categoria = document.getElementById('editCat').value;
+  prods[idx].qtd = parseInt(document.getElementById('editQtd').value)||0;
+  prods[idx].custo = parseFloat(document.getElementById('editCusto').value)||0;
+  prods[idx].preco = parseFloat(document.getElementById('editPreco').value)||0;
+  prods[idx].min = parseInt(document.getElementById('editMin').value)||5;
+  DB.set('produtos', prods);
+  closeModal('editModal');
+  renderEstoqueTable();
+  toast('Produto atualizado!');
+}
+
+function removerProduto(id) {
+  if(!confirm('Remover este produto?')) return;
+  DB.set('produtos', DB.get('produtos').filter(p=>p.id!==id));
+  renderEstoqueTable();
+  toast('Produto removido');
+}
+
+// ===================== FATURAS =====================
+function addItemFatura() {
+  const c = document.getElementById('itensFatura');
+  const produtos = DB.get('produtos');
+  const row = document.createElement('div');
+  row.className = 'form-grid form-grid-4';
+  row.style.marginBottom = '8px';
+  row.innerHTML = `
+    <div class="field">
+      <label>Produto/Serviço</label>
+      <select onchange="autoFillFaturaPreco(this)" style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px 14px;color:var(--text);font-family:'DM Sans',sans-serif;width:100%">
+        <option value="">-- Selecionar --</option>
+        ${produtos.map(p=>`<option value="${p.id}" data-preco="${p.preco}">${p.nome}</option>`).join('')}
+        <option value="__manual__">Manual</option>
+      </select>
+    </div>
+    <div class="field"><label>Descrição</label><input type="text" placeholder="Desc."></div>
+    <div class="field"><label>Qtd</label><input type="number" value="1" min="1"></div>
+    <div class="field" style="display:flex;gap:6px;align-items:flex-end">
+      <div style="flex:1"><label>Preço (Kz)</label><input type="number" value="0" min="0"></div>
+      <button class="btn btn-danger btn-sm" style="margin-bottom:1px" onclick="this.closest('.form-grid').remove()">✕</button>
+    </div>
+  `;
+  c.appendChild(row);
+}
+
+function autoFillFaturaPreco(sel) {
+  const row = sel.closest('.form-grid');
+  const precoInput = row.querySelectorAll('input')[2];
+  const descInput = row.querySelectorAll('input')[0];
+  if(sel.value && sel.value!=='__manual__') {
+    precoInput.value = sel.selectedOptions[0].dataset.preco || 0;
+    descInput.value = sel.selectedOptions[0].text;
+  }
+}
+
+function gerarFatura() {
+  const cliente = document.getElementById('fCliente').value.trim();
+  if(!cliente) { toast('Nome do cliente é obrigatório!','error'); return; }
+  const nif = document.getElementById('fNif').value;
+  const end = document.getElementById('fEndereco').value;
+  const obs = document.getElementById('fObs').value;
+  const itens = [];
+  let total = 0;
+  document.querySelectorAll('#itensFatura .form-grid').forEach(row => {
+    const inputs = row.querySelectorAll('input');
+    const desc = inputs[0].value.trim();
+    const qtd = parseFloat(inputs[1].value)||0;
+    const preco = parseFloat(inputs[2].value)||0;
+    if(desc && qtd>0) { itens.push({desc,qtd,preco,sub:qtd*preco}); total+=qtd*preco; }
+  });
+  if(!itens.length) { toast('Adicione pelo menos um item!','error'); return; }
+  const num = 'FAT-' + String(DB.get('faturas').length+1).padStart(4,'0');
+  const fatura = { id: DB.genId(), num, cliente, nif, end, obs, itens, total, data: today(), ts: Date.now() };
+  const faturas = DB.get('faturas');
+  faturas.push(fatura);
+  DB.set('faturas', faturas);
+  showFaturaModal(fatura);
+  renderFaturasTable();
+  toast('Fatura gerada com sucesso!');
+}
+
+function showFaturaModal(f) {
+  const cfg = DB.get('configs')[0] || {};
+  const logo = localStorage.getItem('gp_logo') || '';
+  const nomeNegocio = cfg.nome || 'GestãoPRO';
+  const nifNegocio = cfg.nif || '';
+  const telNegocio = cfg.tel || '';
+  const emailNegocio = cfg.email || '';
+  const endNegocio = cfg.end || '';
+  const msgAgradecimento = cfg.msg || 'Obrigado pela sua preferência! Volte sempre.';
+
+  document.getElementById('faturaContent').innerHTML = `
+    <div class="fatura-preview" id="fatPrint">
+      <!-- CABEÇALHO -->
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px;padding-bottom:20px;border-bottom:2px solid #e2e8f0">
+        <div style="display:flex;align-items:center;gap:16px">
+          ${logo ? `<img src="${logo}" alt="Logo" style="max-height:60px;max-width:140px;object-fit:contain">` : ''}
+          <div>
+            <h2 style="font-size:22px;font-weight:800;color:#1a1a2e;font-family:'Syne',sans-serif">${nomeNegocio}</h2>
+            ${nifNegocio?`<div style="font-size:11px;color:#64748b">NIF: ${nifNegocio}</div>`:''}
+            ${telNegocio?`<div style="font-size:11px;color:#64748b">Tel: ${telNegocio}</div>`:''}
+            ${emailNegocio?`<div style="font-size:11px;color:#64748b">${emailNegocio}</div>`:''}
+            ${endNegocio?`<div style="font-size:11px;color:#64748b">${endNegocio}</div>`:''}
+          </div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:22px;font-weight:800;color:#1a1a2e;font-family:'Syne',sans-serif">${f.num}</div>
+          <div style="font-size:12px;color:#64748b">Data: ${f.data}</div>
+          <div style="margin-top:6px;background:#f0fdf4;border-radius:6px;padding:4px 10px;display:inline-block;font-size:11px;color:#166534;font-weight:600">FATURA</div>
+        </div>
+      </div>
+      <!-- CLIENTE -->
+      <div style="background:#f8fafc;border-radius:10px;padding:16px;margin-bottom:20px">
+        <div style="font-size:10px;color:#94a3b8;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">Faturar a</div>
+        <div style="font-weight:700;font-size:16px;color:#1e293b">${f.cliente}</div>
+        ${f.nif?`<div style="font-size:12px;color:#64748b">NIF: ${f.nif}</div>`:''}
+        ${f.end?`<div style="font-size:12px;color:#64748b">${f.end}</div>`:''}
+      </div>
+      <!-- TABELA DE ITENS -->
+      <table>
+        <thead><tr><th>#</th><th>Descrição</th><th>Qtd</th><th>Preço Unit.</th><th>Subtotal</th></tr></thead>
+        <tbody>
+          ${f.itens.map((i,n)=>`<tr><td style="color:#94a3b8">${n+1}</td><td>${i.desc}</td><td>${i.qtd}</td><td>${Number(i.preco).toLocaleString('pt-AO')} Kz</td><td><b>${Number(i.sub).toLocaleString('pt-AO')} Kz</b></td></tr>`).join('')}
+        </tbody>
+      </table>
+      <!-- TOTAL -->
+      <div style="text-align:right;margin-top:20px;padding-top:16px;border-top:2px solid #e2e8f0">
+        <span style="font-size:13px;color:#64748b">TOTAL A PAGAR</span>
+        <div style="font-size:30px;font-weight:800;color:#1a1a2e;font-family:'Syne',sans-serif">${Number(f.total).toLocaleString('pt-AO')} Kz</div>
+      </div>
+      <!-- MENSAGEM DE AGRADECIMENTO -->
+      <div style="margin-top:20px;padding:14px 18px;background:linear-gradient(135deg,#f0fdf4,#ecfdf5);border-radius:10px;border-left:4px solid #10b981;text-align:center">
+        <div style="font-size:14px;font-weight:600;color:#065f46">💚 ${msgAgradecimento}</div>
+      </div>
+      ${f.obs?`<div style="margin-top:12px;padding:10px 14px;background:#fafafa;border-radius:8px;font-size:12px;color:#475569;border:1px solid #e2e8f0">📝 ${f.obs}</div>`:''}
+      <!-- RODAPÉ DA FATURA -->
+      <div style="margin-top:28px;padding-top:14px;border-top:1px solid #e2e8f0;text-align:center">
+        <div style="font-size:12px;font-weight:700;color:#64748b">Gerado pelo Sistema de Gestão — 90 Creations</div>
+      </div>
+    </div>
+  `;
+  document.getElementById('faturaModal').classList.add('open');
+}
+
+function printFatura() {
+  const c = document.getElementById('fatPrint').outerHTML;
+  const w = window.open('','_blank');
+  w.document.write(`<html><head><title>Fatura</title><link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;600&display=swap" rel="stylesheet"><style>body{font-family:'DM Sans',sans-serif;padding:40px;max-width:680px;margin:0 auto}table{width:100%;border-collapse:collapse}th{background:#f1f5f9;padding:8px 12px;text-align:left;font-size:12px;color:#64748b}td{padding:8px 12px;border-top:1px solid #e2e8f0}</style></head><body>${c}</body></html>`);
+  w.document.close(); w.print();
+}
+
+function renderFaturasTable() {
+  const faturas = DB.get('faturas').reverse();
+  const el = document.getElementById('faturasTable');
+  if(!faturas.length) { el.innerHTML = `<div class="empty-state"><div class="icon">📄</div><p>Nenhuma fatura emitida ainda</p></div>`; return; }
+  el.innerHTML = `<table><thead><tr><th>Nº</th><th>Cliente</th><th>Data</th><th>Total</th><th>Ação</th></tr></thead><tbody>
+    ${faturas.map(f=>`<tr>
+      <td style="color:var(--accent);font-weight:600">${f.num}</td>
+      <td>${f.cliente}</td>
+      <td>${f.data}</td>
+      <td style="color:var(--green);font-weight:700">${fmt(f.total)}</td>
+      <td><button class="btn btn-ghost btn-sm" onclick='showFaturaModal(${JSON.stringify(f)})'>Ver</button></td>
+    </tr>`).join('')}
+  </tbody></table>`;
+}
+
+// ===================== CLIENTES =====================
+function cadastrarCliente() {
+  const nome = document.getElementById('cNome').value.trim();
+  if(!nome) { toast('Nome do cliente é obrigatório!','error'); return; }
+  const clientes = DB.get('clientes');
+  clientes.push({ id: DB.genId(), nome, tel: document.getElementById('cTel').value, email: document.getElementById('cEmail').value, nif: document.getElementById('cNif').value, end: document.getElementById('cEnd').value, ts: Date.now() });
+  DB.set('clientes', clientes);
+  toast(`Cliente "${nome}" cadastrado!`);
+  ['cNome','cTel','cEmail','cNif','cEnd'].forEach(id=>document.getElementById(id).value='');
+  renderClientesTable();
+  updateClientDatalist();
+}
+
+function renderClientesTable() {
+  const clientes = DB.get('clientes');
+  const vendas = DB.get('vendas');
+  const el = document.getElementById('clientesTable');
+  if(!clientes.length) { el.innerHTML = `<div class="empty-state"><div class="icon">👥</div><p>Nenhum cliente cadastrado ainda</p></div>`; return; }
+  el.innerHTML = `<table><thead><tr><th>Nome</th><th>Telefone</th><th>Email</th><th>Compras</th><th>Total Gasto</th><th>Ação</th></tr></thead><tbody>
+    ${clientes.map(c=>{
+      const cvs = vendas.filter(v=>v.cliente===c.nome);
+      const total = cvs.reduce((s,v)=>s+v.total,0);
+      return `<tr>
+        <td><b>${c.nome}</b></td>
+        <td>${c.tel||'-'}</td>
+        <td>${c.email||'-'}</td>
+        <td><span class="pill pill-blue">${cvs.length}</span></td>
+        <td style="color:var(--green);font-weight:700">${fmt(total)}</td>
+        <td><button class="btn btn-danger btn-sm" onclick="removerCliente('${c.id}')">✕</button></td>
+      </tr>`;
+    }).join('')}
+  </tbody></table>`;
+}
+
+function removerCliente(id) {
+  if(!confirm('Remover este cliente?')) return;
+  DB.set('clientes', DB.get('clientes').filter(c=>c.id!==id));
+  renderClientesTable();
+  toast('Cliente removido');
+}
+
+function updateClientDatalist() {
+  const clientes = DB.get('clientes').map(c=>c.nome);
+  ['clientList','clientListF'].forEach(id=>{
+    const dl = document.getElementById(id);
+    if(dl) dl.innerHTML = clientes.map(n=>`<option value="${n}">`).join('');
+  });
+}
+
+// ===================== DASHBOARD =====================
+function renderDashboard() {
+  const vendas = DB.get('vendas');
+  const prods = DB.get('produtos');
+  const totalVendas = vendas.reduce((s,v)=>s+v.total,0);
+  const hoje = today();
+  const vendaHoje = vendas.filter(v=>v.data===hoje).reduce((s,v)=>s+v.total,0);
+  const totalProds = prods.length;
+  const baixoEstoque = prods.filter(p=>p.qtd<=p.min).length;
+
+  document.getElementById('dashStats').innerHTML = `
+    <div class="stat-card green"><div class="stat-label">Total Vendas</div><div class="stat-value green">${fmt(totalVendas)}</div><div class="stat-change">${vendas.length} transações</div></div>
+    <div class="stat-card blue"><div class="stat-label">Vendas Hoje</div><div class="stat-value blue">${fmt(vendaHoje)}</div><div class="stat-change">${vendas.filter(v=>v.data===hoje).length} hoje</div></div>
+    <div class="stat-card purple"><div class="stat-label">Produtos</div><div class="stat-value purple">${totalProds}</div><div class="stat-change">em catálogo</div></div>
+    <div class="stat-card red"><div class="stat-label">Estoque Baixo</div><div class="stat-value red">${baixoEstoque}</div><div class="stat-change">precisam reposição</div></div>
+  `;
+
+  // Chart últimos 7 dias
+  const days = [];
+  for(let i=6;i>=0;i--) {
+    const d = new Date(); d.setDate(d.getDate()-i);
+    const ds = d.toISOString().split('T')[0];
+    const label = d.toLocaleDateString('pt-AO',{day:'2-digit',month:'2-digit'});
+    const val = vendas.filter(v=>v.data===ds).reduce((s,v)=>s+v.total,0);
+    days.push({label,val});
+  }
+  const maxVal = Math.max(...days.map(d=>d.val),1);
+  document.getElementById('chartBars').innerHTML = days.map(d=>`
+    <div class="chart-bar-wrap">
+      <div class="chart-bar-val">${d.val>0?Math.round(d.val/1000)+'k':''}</div>
+      <div class="chart-bar" style="height:${Math.round((d.val/maxVal)*100)}px;background:linear-gradient(180deg,var(--accent),var(--accent2))"></div>
+      <div class="chart-bar-label">${d.label}</div>
+    </div>`).join('');
+
+  // Últimas vendas
+  const last = [...vendas].reverse().slice(0,5);
+  document.getElementById('dashLastSales').innerHTML = last.length ? last.map(v=>`
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)">
+      <div><div style="font-weight:600;font-size:13px">${v.cliente}</div><div style="font-size:11px;color:var(--muted)">${v.data} • ${v.pagamento}</div></div>
+      <div style="color:var(--green);font-weight:700">${fmt(v.total)}</div>
+    </div>`).join('') : `<div class="empty-state"><p>Sem vendas ainda</p></div>`;
+
+  // Estoque baixo
+  const low = prods.filter(p=>p.qtd<=p.min);
+  document.getElementById('lowStockList').innerHTML = low.length ? low.map(p=>`
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)">
+      <div style="font-size:13px">${p.nome}</div>
+      <div><span class="pill ${p.qtd<=0?'pill-red':'pill-yellow'}">${p.qtd} und.</span></div>
+    </div>`).join('') : `<div class="empty-state"><p>Todos os produtos OK ✓</p></div>`;
+
+  // Top produtos
+  const prodMap = {};
+  vendas.forEach(v=>v.itens.forEach(i=>{ prodMap[i.desc]=(prodMap[i.desc]||0)+i.qtd; }));
+  const topP = Object.entries(prodMap).sort((a,b)=>b[1]-a[1]).slice(0,5);
+  const maxQ = Math.max(...topP.map(x=>x[1]),1);
+  document.getElementById('topProducts').innerHTML = topP.length ? topP.map(([name,q])=>`
+    <div style="margin-bottom:12px">
+      <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span>${name}</span><span style="color:var(--muted)">${q} und.</span></div>
+      <div class="progress"><div class="progress-bar green" style="width:${Math.round((q/maxQ)*100)}%"></div></div>
+    </div>`).join('') : `<div class="empty-state"><p>Sem dados ainda</p></div>`;
+}
+
+// ===================== RELATÓRIOS =====================
+function relTab(id, el) {
+  ['financeiro','estoque','produtos'].forEach(t=>{ document.getElementById('rel-'+t).style.display='none'; });
+  document.getElementById('rel-'+id).style.display='block';
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  if(id==='estoque') renderRelEstoque();
+  if(id==='produtos') renderRelProdutos();
+}
+
+function renderRelatorios() {
+  const vendas = DB.get('vendas');
+  const totalVendas = vendas.reduce((s,v)=>s+v.total,0);
+  const hoje = today();
+  const mesAtual = hoje.substr(0,7);
+  const vendaMes = vendas.filter(v=>v.data&&v.data.startsWith(mesAtual)).reduce((s,v)=>s+v.total,0);
+  const ticketMedio = vendas.length ? totalVendas/vendas.length : 0;
+  const clientes = new Set(vendas.map(v=>v.cliente)).size;
+  document.getElementById('relStats').innerHTML = `
+    <div class="stat-card green"><div class="stat-label">Receita Total</div><div class="stat-value green">${fmt(totalVendas)}</div></div>
+    <div class="stat-card blue"><div class="stat-label">Receita do Mês</div><div class="stat-value blue">${fmt(vendaMes)}</div></div>
+    <div class="stat-card purple"><div class="stat-label">Ticket Médio</div><div class="stat-value purple">${fmt(Math.round(ticketMedio))}</div></div>
+    <div class="stat-card red"><div class="stat-label">Clientes Únicos</div><div class="stat-value red">${clientes}</div></div>
+  `;
+  filtrarRel();
+  renderRelPagChart();
+}
+
+function filtrarRel() {
+  const de = document.getElementById('relDe').value;
+  const ate = document.getElementById('relAte').value;
+  let vendas = DB.get('vendas').reverse();
+  if(de) vendas = vendas.filter(v=>v.data>=de);
+  if(ate) vendas = vendas.filter(v=>v.data<=ate);
+  const el = document.getElementById('relVendasTable');
+  if(!vendas.length) { el.innerHTML = `<div class="empty-state"><p>Nenhuma venda no período</p></div>`; return; }
+  el.innerHTML = `<table><thead><tr><th>Data</th><th>Cliente</th><th>Pagamento</th><th>Itens</th><th>Total</th></tr></thead><tbody>
+    ${vendas.map(v=>`<tr><td>${v.data}</td><td>${v.cliente}</td><td>${v.pagamento}</td><td>${v.itens.length}</td><td style="color:var(--green);font-weight:700">${fmt(v.total)}</td></tr>`).join('')}
+  </tbody></table>`;
+}
+
+function renderRelPagChart() {
+  const vendas = DB.get('vendas');
+  const pags = {};
+  vendas.forEach(v=>{ pags[v.pagamento]=(pags[v.pagamento]||0)+v.total; });
+  const total = Object.values(pags).reduce((s,x)=>s+x,0)||1;
+  const colors = ['var(--accent)','var(--accent2)','var(--green)','var(--yellow)'];
+  const entries = Object.entries(pags);
+  document.getElementById('relPagChart').innerHTML = entries.length ? entries.map(([k,v],i)=>`
+    <div style="margin-bottom:14px">
+      <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:5px"><span>${k}</span><span style="font-weight:700">${fmt(v)} (${Math.round((v/total)*100)}%)</span></div>
+      <div class="progress"><div class="progress-bar" style="width:${Math.round((v/total)*100)}%;background:${colors[i%colors.length]}"></div></div>
+    </div>`).join('') : `<div class="empty-state"><p>Sem dados ainda</p></div>`;
+}
+
+function renderRelEstoque() {
+  const prods = DB.get('produtos');
+  const el = document.getElementById('relEstoqueTable');
+  if(!prods.length) { el.innerHTML = `<div class="empty-state"><p>Nenhum produto</p></div>`; return; }
+  const totalValor = prods.reduce((s,p)=>s+(p.qtd*p.preco),0);
+  const totalCusto = prods.reduce((s,p)=>s+(p.qtd*p.custo),0);
+  el.innerHTML = `
+    <div style="display:flex;gap:12px;margin-bottom:16px">
+      <div class="stat-card green" style="flex:1"><div class="stat-label">Valor Total (Venda)</div><div class="stat-value green" style="font-size:18px">${fmt(totalValor)}</div></div>
+      <div class="stat-card red" style="flex:1"><div class="stat-label">Custo Total</div><div class="stat-value red" style="font-size:18px">${fmt(totalCusto)}</div></div>
+    </div>
+    <table><thead><tr><th>Produto</th><th>Categoria</th><th>Qtd</th><th>Custo Unit.</th><th>Preço</th><th>Val. Estoque</th><th>Status</th></tr></thead><tbody>
+      ${prods.map(p=>{
+        const status = p.qtd<=0?['pill-red','Sem Estoque']:p.qtd<=p.min?['pill-yellow','Baixo']:['pill-green','OK'];
+        return `<tr><td><b>${p.nome}</b></td><td>${p.categoria}</td><td>${p.qtd}</td><td>${fmt(p.custo)}</td><td style="color:var(--accent)">${fmt(p.preco)}</td><td style="font-weight:700">${fmt(p.qtd*p.preco)}</td><td><span class="pill ${status[0]}">${status[1]}</span></td></tr>`;
+      }).join('')}
+    </tbody></table>`;
+}
+
+function renderRelProdutos() {
+  const vendas = DB.get('vendas');
+  const prodMap = {};
+  vendas.forEach(v=>v.itens.forEach(i=>{ prodMap[i.desc]=(prodMap[i.desc]||{qtd:0,total:0}); prodMap[i.desc].qtd+=i.qtd; prodMap[i.desc].total+=i.sub; }));
+  const entries = Object.entries(prodMap).sort((a,b)=>b[1].total-a[1].total);
+  const maxV = Math.max(...entries.map(e=>e[1].total),1);
+  document.getElementById('relProdutosChart').innerHTML = entries.length ? `
+    <table style="margin-bottom:20px"><thead><tr><th>Produto</th><th>Qtd Vendida</th><th>Receita</th><th>%</th></tr></thead><tbody>
+      ${entries.map(([n,v])=>`<tr><td><b>${n}</b></td><td>${v.qtd}</td><td style="color:var(--green);font-weight:700">${fmt(v.total)}</td><td>
+        <div style="display:flex;align-items:center;gap:8px"><div class="progress" style="flex:1"><div class="progress-bar green" style="width:${Math.round((v.total/maxV)*100)}%"></div></div><span style="font-size:11px;width:30px;text-align:right">${Math.round((v.total/maxV)*100)}%</span></div>
+      </td></tr>`).join('')}
+    </tbody></table>` : `<div class="empty-state"><p>Sem dados de vendas ainda</p></div>`;
+}
+
+function exportarCSV() {
+  const vendas = DB.get('vendas');
+  if(!vendas.length) { toast('Nenhuma venda para exportar','error'); return; }
+  let csv = 'Data,Cliente,Pagamento,Total\n';
+  vendas.forEach(v=>{ csv += `${v.data},"${v.cliente}","${v.pagamento}",${v.total}\n`; });
+  const blob = new Blob([csv], {type:'text/csv'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href=url; a.download='vendas.csv'; a.click();
+  toast('CSV exportado com sucesso!');
+}
+
+// ===================== FORNECEDORES =====================
+function cadastrarFornecedor() {
+  const nome = document.getElementById('fNome').value.trim();
+  if(!nome) { toast('Nome do fornecedor é obrigatório!','error'); return; }
+  const forn = DB.get('fornecedores');
+  forn.push({
+    id: DB.genId(),
+    nome,
+    contacto: document.getElementById('fContacto').value,
+    telefone: document.getElementById('fTelefone').value,
+    email: document.getElementById('fEmail').value,
+    whatsapp: document.getElementById('fWhatsapp').value,
+    nif: document.getElementById('fNifF').value,
+    endereco: document.getElementById('fEnderecoF').value,
+    cidade: document.getElementById('fCidade').value,
+    pais: document.getElementById('fPais').value || 'Angola',
+    tipoProduto: document.getElementById('fTipoProd').value,
+    prazo: document.getElementById('fPrazo').value,
+    condicoes: document.getElementById('fCondicoes').value,
+    obs: document.getElementById('fObsF').value,
+    ts: Date.now()
+  });
+  DB.set('fornecedores', forn);
+  toast(`Fornecedor "${nome}" cadastrado!`);
+  ['fNome','fContacto','fTelefone','fEmail','fWhatsapp','fNifF','fEnderecoF','fCidade','fObsF'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  document.getElementById('fPais').value='Angola';
+  renderFornecedoresTable();
+}
+
+function renderFornecedoresTable(q='', tipo='') {
+  let forn = DB.get('fornecedores');
+  if(q) forn = forn.filter(f=>f.nome.toLowerCase().includes(q.toLowerCase())||f.cidade.toLowerCase().includes(q.toLowerCase())||(f.contacto||'').toLowerCase().includes(q.toLowerCase()));
+  if(tipo) forn = forn.filter(f=>f.tipoProduto===tipo);
+  const el = document.getElementById('fornecedoresTable');
+  if(!forn.length) { el.innerHTML = `<div class="empty-state"><div class="icon">🏭</div><p>Nenhum fornecedor cadastrado ainda</p></div>`; return; }
+  el.innerHTML = `<table><thead><tr><th>Empresa</th><th>Contacto</th><th>Telefone</th><th>Cidade</th><th>Tipo de Produto</th><th>Prazo</th><th>Condições</th><th>Ações</th></tr></thead><tbody>
+    ${forn.map(f=>`<tr>
+      <td><b>${f.nome}</b>${f.nif?`<div style="font-size:11px;color:var(--muted)">NIF: ${f.nif}</div>`:''}</td>
+      <td>${f.contacto||'-'}</td>
+      <td>${f.telefone||'-'}${f.whatsapp?`<div style="font-size:11px;color:var(--green)">WA: ${f.whatsapp}</div>`:''}</td>
+      <td>${f.cidade||'-'}${f.pais?`, ${f.pais}`:''}</td>
+      <td><span class="pill pill-yellow">${f.tipoProduto}</span></td>
+      <td>${f.prazo?f.prazo+' dias':'-'}</td>
+      <td>${f.condicoes||'-'}</td>
+      <td style="display:flex;gap:4px">
+        <button class="btn btn-ghost btn-sm" onclick="verFornecedor('${f.id}')">Ver</button>
+        <button class="btn btn-danger btn-sm" onclick="removerFornecedor('${f.id}')">✕</button>
+      </td>
+    </tr>`).join('')}
+  </tbody></table>`;
+}
+
+function verFornecedor(id) {
+  const f = DB.get('fornecedores').find(x=>x.id===id);
+  if(!f) return;
+  document.getElementById('fornecedorDetalhes').innerHTML = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div><div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:3px">Empresa</div><div style="font-weight:700">${f.nome}</div></div>
+      <div><div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:3px">NIF/NIPC</div><div>${f.nif||'-'}</div></div>
+      <div><div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:3px">Pessoa de Contacto</div><div>${f.contacto||'-'}</div></div>
+      <div><div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:3px">Telefone</div><div>${f.telefone||'-'}</div></div>
+      <div><div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:3px">WhatsApp</div><div style="color:var(--green)">${f.whatsapp||'-'}</div></div>
+      <div><div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:3px">Email</div><div>${f.email||'-'}</div></div>
+      <div><div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:3px">Endereço</div><div>${f.endereco||'-'}</div></div>
+      <div><div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:3px">Cidade / País</div><div>${[f.cidade,f.pais].filter(Boolean).join(', ')||'-'}</div></div>
+      <div><div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:3px">Tipo de Produto</div><span class="pill pill-yellow">${f.tipoProduto}</span></div>
+      <div><div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:3px">Prazo de Entrega</div><div>${f.prazo?f.prazo+' dias':'-'}</div></div>
+      <div style="grid-column:span 2"><div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:3px">Condições de Pagamento</div><div>${f.condicoes||'-'}</div></div>
+      ${f.obs?`<div style="grid-column:span 2"><div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:3px">Observações</div><div style="background:var(--surface2);border-radius:8px;padding:10px;font-size:13px">${f.obs}</div></div>`:''}
+    </div>
+  `;
+  document.getElementById('fornecedorModal').classList.add('open');
+}
+
+function removerFornecedor(id) {
+  if(!confirm('Remover este fornecedor?')) return;
+  DB.set('fornecedores', DB.get('fornecedores').filter(f=>f.id!==id));
+  renderFornecedoresTable();
+  toast('Fornecedor removido');
+}
+
+// ===================== CONFIGURAÇÕES / LOGO =====================
+function carregarLogo(input) {
+  const file = input.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const data = e.target.result;
+    localStorage.setItem('gp_logo', data);
+    document.getElementById('logoPreview').src = data;
+    document.getElementById('logoPreviewWrap').style.display = 'block';
+    aplicarLogoSidebar();
+    toast('Logotipo carregado com sucesso!');
+  };
+  reader.readAsDataURL(file);
+}
+
+function removerLogo() {
+  localStorage.removeItem('gp_logo');
+  document.getElementById('logoPreview').src = '';
+  document.getElementById('logoPreviewWrap').style.display = 'none';
+  aplicarLogoSidebar();
+  toast('Logotipo removido');
+}
+
+function aplicarLogoSidebar() {
+  const logo = localStorage.getItem('gp_logo') || '';
+  const wrap = document.getElementById('logoImgWrap');
+  const img = document.getElementById('logoImgSidebar');
+  const cfg = DB.get('configs')[0] || {};
+  if(logo) { img.src = logo; wrap.style.display = 'block'; } else { wrap.style.display = 'none'; }
+  if(cfg.nome) document.getElementById('sidebarAppName').textContent = cfg.nome;
+}
+
+function salvarConfigs() {
+  const cfg = {
+    nome: document.getElementById('cfgNome').value.trim() || 'GestãoPRO',
+    nif: document.getElementById('cfgNif').value,
+    tel: document.getElementById('cfgTel').value,
+    email: document.getElementById('cfgEmail').value,
+    end: document.getElementById('cfgEnd').value,
+    msg: document.getElementById('cfgMsg').value || 'Obrigado pela sua preferência! Volte sempre.'
+  };
+  DB.set('configs', [cfg]);
+  aplicarLogoSidebar();
+  toast('Configurações guardadas!');
+}
+
+function carregarConfigs() {
+  const cfg = DB.get('configs')[0] || {};
+  const logo = localStorage.getItem('gp_logo') || '';
+  if(document.getElementById('cfgNome')) {
+    document.getElementById('cfgNome').value = cfg.nome || '';
+    document.getElementById('cfgNif').value = cfg.nif || '';
+    document.getElementById('cfgTel').value = cfg.tel || '';
+    document.getElementById('cfgEmail').value = cfg.email || '';
+    document.getElementById('cfgEnd').value = cfg.end || '';
+    document.getElementById('cfgMsg').value = cfg.msg || 'Obrigado pela sua preferência! Volte sempre.';
+  }
+  if(logo && document.getElementById('logoPreview')) {
+    document.getElementById('logoPreview').src = logo;
+    document.getElementById('logoPreviewWrap').style.display = 'block';
+  }
+}
+
+// ===================== INIT =====================
+window.onload = init;
+</script>
 </body>
 </html>
